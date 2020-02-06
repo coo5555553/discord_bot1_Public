@@ -1,4 +1,4 @@
-from discord_bot1.classCog import Cog_Ext
+from classCog import Cog_Ext
 from discord.ext import commands
 import discord
 import json
@@ -46,6 +46,6 @@ class Extra(Cog_Ext):
     async def ping(self, ctx):
         await ctx.send(f'{round(self.bot.latency * 1000)} (ms)')
 
-        
+
 def setup(bot):
     bot.add_cog(Extra(bot))

@@ -1,4 +1,4 @@
-from discord_bot1.classCog import Cog_Ext
+from classCog import Cog_Ext
 from discord.ext import commands
 import os
 import time
