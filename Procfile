@@ -1,1 +1,1 @@
-worker: python3 newB.py
+worker: python3 body.py
