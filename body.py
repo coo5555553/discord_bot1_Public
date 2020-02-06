@@ -14,7 +14,7 @@ bot.remove_command("help")
 
 @bot.event
 async def on_ready():
-    await bot.change_presence(activity=discord.Game(name="test"))
+    await bot.change_presence(activity=discord.Game(name=jdata["GAME"]))
     print('Logged in as')
     print(bot.user.name)
     print(bot.user.id)

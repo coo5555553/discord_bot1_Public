@@ -1,6 +1,8 @@
 from classCog import Cog_Ext
 from discord.ext import commands
 import discord
+import io
+import aiohttp
 import json
 import pytz
 import random
@@ -29,17 +31,27 @@ class Extra(Cog_Ext):
             await msg.channel.send(f'{random.randint(0, 100)}%')
         if msg.content == "沒事":
             await msg.channel.send("樓上被盜")
-        if msg.content == "怕":
-            await msg.channel.send("怕三小，沒被壓路機砸過484")
+        if msg.content == "再啦" or msg.content == "在啦":
+            await msg.channel.send("幹")
+        if msg.content == "不要瞎掰好嗎":
+            async with aiohttp.ClientSession() as session:
+                async with session.get("https://i.imgur.com/yTRCBCs.jpg") as resp:
+                    data = io.BytesIO(await resp.read())
+                    await msg.channel.send(file=discord.File(data, 'dontxiabye.png'))
         if msg.content == "並沒有":
-            img = discord.File("images\\dontshabai.jpg")
-            await msg.channel.send(file=img)
+            async with aiohttp.ClientSession() as session:
+                async with session.get("https://i.imgur.com/4NkYYWw.jpg") as resp:
+                    data = io.BytesIO(await resp.read())
+                    await msg.channel.send(file=discord.File(data, "bingmeiyou.jpg"))
 
 
     @commands.command()
-    async def setgame(self, ctx, msg):
+    async def setgame(self, ctx, *, arg):
         if ctx.author.id == jdata["DUCK_ID"]:
-            await self.bot.change_presence(activity=discord.Game(name=msg))
+            jdata["GAME"] = arg
+            with open("settings.json", "w", encoding="utf8") as jfile:
+                json.dump(jdata, jfile, indent=4)
+            await self.bot.change_presence(activity=discord.Game(name=jdata["GAME"]))
 
 
     @commands.command()
