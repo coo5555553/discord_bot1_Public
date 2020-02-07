@@ -59,5 +59,35 @@ class Extra(Cog_Ext):
         await ctx.send(f'{round(self.bot.latency * 1000)} (ms)')
 
 
+    @commands.command()
+    async def invite_create(self, ctx, time=100):
+        invit = await ctx.channel.create_invite(max_age=time)
+        await ctx.channel.send(invit)
+
+
+    @commands.command()
+    async def invite_list(self,ctx):
+        channels=ctx.guild.channels
+        invites=""
+        invite=await ctx.guild.invites()
+        for i in invite:
+            invites += f"連結：{i.url}\n"
+            invites += f"創造時間：{i.created_at}\n"
+            if i.max_age == 0:
+                invites += f"距離過期：無限制"
+            else:
+                invites += f"距離過期：{i.max_age}"
+            invites += f"已使用次數：{i.uses}\n"
+            if i.max_uses == 0:
+                invites += f"最大使用次數：無限制\n"
+            else:
+                invites += f"最大使用次數：{i.max_uses}\n"
+            invites += f"建立於頻道：<#{i.channel.id}>\n"
+            invites += f"建立人：{i.inviter.mention}\n"
+            invites += ("-"*20) + "\n"
+        embed1=discord.Embed(title="以下為此伺服器建立之邀請",description=invites)
+        await ctx.channel.send(embed=embed1)
+
+
 def setup(bot):
     bot.add_cog(Extra(bot))
