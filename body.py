@@ -23,7 +23,7 @@ async def on_ready():
 
 @bot.command()
 async def load(ctx, ext):
-    if ctx.author.id == jdata["DUCK_ID"]:
+    if await bot.is_owner(ctx.author):
         bot.load_extension(f'cmds.{ext}')
         await ctx.send(f'Loaded {ext}.')
     else:
@@ -32,7 +32,7 @@ async def load(ctx, ext):
 
 @bot.command()
 async def unload(ctx, ext):
-    if ctx.author.id == jdata["DUCK_ID"]:
+    if await bot.is_owner(ctx.author):
         bot.unload_extension(f'cmds.{ext}')
         await ctx.send(f'Unloaded {ext}.')
     else:
@@ -41,7 +41,7 @@ async def unload(ctx, ext):
 
 @bot.command()
 async def reload(ctx, ext):
-    if ctx.author.id == jdata["DUCK_ID"]:
+    if await bot.is_owner(ctx.author):
         bot.reload_extension(f'cmds.{ext}')
         await ctx.send(f'Reloaded {ext}.')
     else:

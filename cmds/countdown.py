@@ -20,7 +20,7 @@ class Countdown(Cog_Ext):
             await self.bot.wait_until_ready()
             with open("settings.json", "r", encoding="utf8") as jfile:
                 jdata = json.load(jfile)
-            self.channel = self.bot.get_channel(614688945388912651)
+            self.channel = self.bot.get_channel(jdata["CHANNEL"])
             d1 = datetime.date(2020, 2, 24)
             d2 = datetime.date(2020, 7, 1)
             d3 = datetime.date(2020, 5, 16)

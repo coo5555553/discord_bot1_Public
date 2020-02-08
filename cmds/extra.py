@@ -7,6 +7,7 @@ import json
 import pytz
 import random
 import datetime
+from disputils import BotEmbedPaginator, BotConfirmation, BotMultipleChoice
 
 
 tz = pytz.timezone("Asia/Taipei")
@@ -15,16 +16,6 @@ with open('settings.json', 'r', encoding='utf8') as jfile:
 
 
 class Extra(Cog_Ext):
-    @commands.command()
-    async def help(self, ctx):
-        embed=discord.Embed(title="Help", description="指令表", color=0xedf72d, timestamp=datetime.datetime.now(tz))
-        embed.set_author(name="duck_test", icon_url="https://i.imgur.com/y321pla.jpg")
-        embed.set_thumbnail(url="https://i.imgur.com/zPRb1e9.png")
-        embed.add_field(name="--------基本功能--------", value="|help 顯示此視窗\n|ping 測試機器人的延遲", inline=True)
-        embed.set_footer(text="持續開發中...\n")
-        await ctx.send(embed=embed)
-
-
     @commands.Cog.listener()
     async def on_message(self, msg):
         if msg.content.endswith("的機率") and msg.content != "的機率":
@@ -46,8 +37,8 @@ class Extra(Cog_Ext):
 
 
     @commands.command()
-    async def setgame(self, ctx, *, arg):
-        if ctx.author.id == jdata["DUCK_ID"]:
+    async def set_game(self, ctx, *, arg):
+        if await self.bot.is_owner(ctx.author):
             jdata["GAME"] = arg
             with open("settings.json", "w", encoding="utf8") as jfile:
                 json.dump(jdata, jfile, indent=4)
@@ -55,13 +46,9 @@ class Extra(Cog_Ext):
 
 
     @commands.command()
-    async def ping(self, ctx):
-        await ctx.send(f'{round(self.bot.latency * 1000)} (ms)')
-
-
-    @commands.command()
-    async def invite_create(self, ctx, time=100):
-        invit = await ctx.channel.create_invite(max_age=time)
+    @commands.has_guild_permissions(create_instant_invite=True)
+    async def invite_create(self, ctx, time=100, Cnt=1):
+        invit = await ctx.channel.create_invite(max_age=time, max_uses=Cnt)
         await ctx.channel.send(invit)
 
 
@@ -74,19 +61,57 @@ class Extra(Cog_Ext):
             invites += f"連結：{i.url}\n"
             invites += f"創造時間：{i.created_at}\n"
             if i.max_age == 0:
-                invites += f"距離過期：無限制"
+                invites += f"距離過期：無限制\n"
             else:
-                invites += f"距離過期：{i.max_age}"
+                invites += f"距離過期：{i.max_age}\n"
             invites += f"已使用次數：{i.uses}\n"
             if i.max_uses == 0:
                 invites += f"最大使用次數：無限制\n"
             else:
                 invites += f"最大使用次數：{i.max_uses}\n"
-            invites += f"建立於頻道：<#{i.channel.id}>\n"
             invites += f"建立人：{i.inviter.mention}\n"
             invites += ("-"*20) + "\n"
         embed1=discord.Embed(title="以下為此伺服器建立之邀請",description=invites)
-        await ctx.channel.send(embed=embed1)
+        if invites == "":
+            await ctx.send("此伺服器目前無邀請")
+        else:
+            await ctx.channel.send(embed=embed1)
+
+
+    @commands.command()
+    async def get_user(self, ctx, id: int):
+        user = await self.bot.fetch_user(id)
+        await ctx.send(user)
+
+
+    @commands.command()
+    async def rand_team(self, ctx, teams: int, count: int):
+        if count < 2:
+            await ctx.send("每組需要大於一人")
+            return
+        if teams < 1:
+            await ctx.send("需要大於一組")
+            return
+        mems = ctx.guild.members
+        onl = []
+        onl_cnt = 0
+        for i in mems:
+            if str(i.status) == "online" and not i.bot:
+                onl.append(i)
+                onl_cnt += 1
+        if onl_cnt < (teams * count):
+            await ctx.send("當前線上人數不足")
+            return
+        Embeds=[]
+        for i in range(teams):
+            tmpEm = discord.Embed(title=f"第{i + 1}組")
+            for j in range(count):
+                t = random.choice(onl)
+                onl.remove(t)
+                tmpEm.add_field(name=f"#{j + 1}", value=f"{t}", inline=False)
+            Embeds.append(tmpEm)
+        paginator = BotEmbedPaginator(ctx, Embeds)
+        await paginator.run()
 
 
 def setup(bot):

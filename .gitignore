@@ -1,4 +1,5 @@
 
-keep_alive.py
 *.pyc
 readme.txt
+keep_alive.py
+cmds/__pycache__/countdown.cpython-38.pyc
