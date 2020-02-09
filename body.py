@@ -6,6 +6,11 @@ import discord
 
 with open('settings.json', 'r', encoding='utf8') as jfile:
     jdata = json.load(jfile)
+no = discord.Embed(
+    title="You are not My Owner!", 
+    color=discord.Color.dark_red()
+)
+no.set_image(url="https://i.imgur.com/Z67P5RS.gif")
 
 
 bot = commands.Bot(command_prefix = '|')
@@ -27,7 +32,7 @@ async def load(ctx, ext):
         bot.load_extension(f'cmds.{ext}')
         await ctx.send(f'Loaded {ext}.')
     else:
-        await ctx.send("You Don't Have the Permission to Use this Command!")
+        await ctx.send(embed=no)
 
 
 @bot.command()
@@ -36,7 +41,7 @@ async def unload(ctx, ext):
         bot.unload_extension(f'cmds.{ext}')
         await ctx.send(f'Unloaded {ext}.')
     else:
-        await ctx.send("You Don't Have the Permission to Use this Command!")
+        await ctx.send(embed=no)
 
 
 @bot.command()
@@ -45,7 +50,7 @@ async def reload(ctx, ext):
         bot.reload_extension(f'cmds.{ext}')
         await ctx.send(f'Reloaded {ext}.')
     else:
-        await ctx.send("You Don't Have the Permission to Use this Command!")
+        await ctx.send(embed=no)
 
 
 for fname in os.listdir('./cmds'):

@@ -36,7 +36,7 @@ class Main(Cog_Ext):
         ]
         paginator = BotEmbedPaginator(ctx, embeds)
         await paginator.run()
-    
+
 
     @commands.command()
     async def ping(self, ctx):
@@ -53,8 +53,21 @@ class Main(Cog_Ext):
                 if i.bot:
                    onl_bot += 1
                 else:
-                    onl_cnt += 1 
+                    onl_cnt += 1
         await ctx.send(f"當前線上為{onl_cnt}人和{onl_bot}個機器人")
+
+
+    @commands.command()
+    @commands.has_guild_permissions(kick_members=True)
+    async def kick(self, ctx, id: discord.User, *, reas=None):
+        try:
+            await ctx.guild.kick(id)
+        except Exception as e:
+            await ctx.send(f"踢出使用者失敗，原因為\n{e}")
+            return
+        else:
+            await ctx.send(f"已踢出 **{id.mention}**\n原因為 {reas}")
+
 
 
 def setup(bot):

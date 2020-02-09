@@ -10,6 +10,11 @@ import datetime
 from disputils import BotEmbedPaginator, BotConfirmation, BotMultipleChoice
 
 
+no = discord.Embed(
+    title="You are not My Owner!", 
+    color=discord.Color.dark_red()
+)
+no.set_image(url="https://i.imgur.com/Z67P5RS.gif")
 tz = pytz.timezone("Asia/Taipei")
 with open('settings.json', 'r', encoding='utf8') as jfile:
     jdata = json.load(jfile)
@@ -43,6 +48,8 @@ class Extra(Cog_Ext):
             with open("settings.json", "w", encoding="utf8") as jfile:
                 json.dump(jdata, jfile, indent=4)
             await self.bot.change_presence(activity=discord.Game(name=jdata["GAME"]))
+        else:
+            await ctx.send(embed=no)
 
 
     @commands.command()
@@ -79,9 +86,12 @@ class Extra(Cog_Ext):
 
 
     @commands.command()
-    async def get_user(self, ctx, id: int):
-        user = await self.bot.fetch_user(id)
-        await ctx.send(user)
+    async def get_user(self, ctx, id: discord.User):
+        try:
+            #user = await self.bot.fetch_user(id)
+            await ctx.send(id.mention)
+        except Exception as e:
+            await ctx.send(f"查詢失敗，原因為{e}")
 
 
     @commands.command()

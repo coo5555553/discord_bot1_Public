@@ -28,7 +28,7 @@ class Music(Cog_Ext):
         voice = get(self.bot.voice_clients, guild=ctx.guild)
         if voice and voice.is_connected():
             await voice.disconnect()
-            await ctx.send(f"Disconnected from {ch}.")
+            await ctx.send(f"Disconnected from VoiceChannel.")
         else:
             await ctx.send(f"Not in a VoiceChannel.")
 
