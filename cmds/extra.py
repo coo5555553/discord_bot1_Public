@@ -86,12 +86,17 @@ class Extra(Cog_Ext):
 
 
     @commands.command()
-    async def get_user(self, ctx, id: discord.User):
-        try:
-            #user = await self.bot.fetch_user(id)
-            await ctx.send(id.mention)
-        except Exception as e:
-            await ctx.send(f"查詢失敗，原因為{e}")
+    async def get_user(self, ctx, id: discord.User = None):
+        if id:
+            try:
+                await ctx.send(f"{id.mention}")
+            except Exception as e:
+                await ctx.send(f"查詢失敗，原因為{e}")
+        else:
+            try:
+                await ctx.send(f"{ctx.author.mention}")
+            except Exception as e:
+                await ctx.send(f"查詢失敗，原因為{e}")
 
 
     @commands.command()
@@ -106,7 +111,7 @@ class Extra(Cog_Ext):
         onl = []
         onl_cnt = 0
         for i in mems:
-            if str(i.status) == "online" and not i.bot:
+            if (str(i.status) == "online" or str(i.status) == "idle") and not i.bot:
                 onl.append(i)
                 onl_cnt += 1
         if onl_cnt < (teams * count):
