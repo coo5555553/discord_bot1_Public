@@ -22,17 +22,18 @@ class Weeb(Cog_Ext):
     async def ascii_art(self, ctx, num: int = 0):
         with open("weeb.json", "r", encoding="utf8") as f:
             weebs = json.load(f)
-        if str(ctx.author.id) in weebs["log"] and not self.bot.is_owner(ctx.author):
+        if(num > weebs["ascii"]["count"]):
+            await ctx.send()
+        if str(ctx.author.id) in weebs["log"] and not await self.bot.is_owner(ctx.author):
             Td = weebs["log"][str(ctx.author.id)]
             delta = Td - datetime.datetime.now(tz).timestamp()
             if(delta > 0):
                 await ctx.send("{0}，你還要{1}秒才能使用此指令".format(ctx.author.mention, round(delta)))
                 return
         if num:
-            i = num
+            await ctx.send(weebs["ascii"][str(num)])
         else:
-            i = random.choice(range(weebs["ascii"]["count"]))
-        await ctx.send(weebs["ascii"][str(i + 1)])
+            await ctx.send(weebs["ascii"][str(random.choice(range(weebs["ascii"]["count"])) + 1)])
         weebs["log"][str(ctx.author.id)] = (datetime.datetime.now(tz) + datetime.timedelta(seconds=100)).timestamp()
         with open("weeb.json", "w", encoding="utf8") as f:
             json.dump(weebs, f, indent=4, ensure_ascii=False)
