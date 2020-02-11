@@ -4,3 +4,4 @@ readme.txt
 keep_alive.py
 cmds/__pycache__/countdown.cpython-38.pyc
 cmds/__pycache__/countdown.cpython-38.pyc
+*.pyc
