@@ -86,15 +86,29 @@ class Extra(Cog_Ext):
 
 
     @commands.command()
-    async def get_user(self, ctx, id: discord.User = None):
+    async def get_user(self, ctx, id: int = 0):
         if id:
             try:
-                await ctx.send(f"{id.mention}")
+                usr = ctx.guild.get_member(id)
+                await ctx.send(f"{usr.mention}\n{usr.status}")
             except Exception as e:
                 await ctx.send(f"查詢失敗，原因為{e}")
         else:
             try:
-                await ctx.send(f"{ctx.author.mention}")
+                await ctx.send(f"{ctx.author.mention}\n{ctx.guild.get_member(ctx.author.id).status}")
+            except Exception as e:
+                await ctx.send(f"查詢失敗，原因為{e}")
+
+
+    @commands.command()
+    async def fetch_user(self, ctx, id: int = 0):
+        if not id:
+            await ctx.channel.send("請輸入使用者ID")
+            return
+        else:
+            try:
+                usr = await self.bot.fetch_user(id)
+                await ctx.channel.send(usr.mention)
             except Exception as e:
                 await ctx.send(f"查詢失敗，原因為{e}")
 
