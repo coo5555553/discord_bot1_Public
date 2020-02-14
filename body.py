@@ -2,6 +2,9 @@ from discord.ext import commands
 import os
 import json
 import discord
+import sys
+import traceback
+
 
 
 with open('settings.json', 'r', encoding='utf8') as jfile:
@@ -51,6 +54,21 @@ async def reload(ctx, ext):
         await ctx.send(f'Reloaded {ext}.')
     else:
         await ctx.send(embed=no)
+
+# @bot.event
+# async def on_command_error(self, ctx, error):
+#     if hasattr(ctx.command, "on_error"):
+#         return
+#     error = getattr(error, "original", error)
+#     if isinstance(error, commands.CommandNotFound):
+#         return await ctx.send(
+#             f"That command does not exist. Please use `{self.bot.command_prefix}help` for a list of commands."
+#         )
+#     if isinstance(error, commands.CommandError):
+#         return await ctx.send(
+#             f"Error executing command `{ctx.command.name}`: {str(error)}")
+#     await ctx.send(
+#         "An unexpected error occurred while running that command.")
 
 
 for fname in os.listdir('./cmds'):
