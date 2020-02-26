@@ -4,6 +4,7 @@ import discord
 import json
 import datetime
 import pytz
+from disputils import BotMultipleChoice
 
 
 tz = pytz.timezone("Asia/Taipei")
@@ -34,6 +35,14 @@ class Vote(Cog_Ext):
         S = await ctx.send(embed=emb)
         for i in range(len(msgs)):
             await S.add_reaction(reas[i])
+
+
+    @commands.command()
+    async def choice(self, ctx):
+        multiple_choice = BotMultipleChoice(ctx, ['one', 'two', 'three', 'four', 'five', 'six'], "Testing stuff")
+        await multiple_choice.run()
+
+        await multiple_choice.quit(multiple_choice.choice)
 
         
         

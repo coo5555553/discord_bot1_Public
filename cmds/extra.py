@@ -25,28 +25,37 @@ class Extra(Cog_Ext):
     async def on_message(self, msg):
         if msg.content.endswith("的機率") and msg.content != "的機率":
             await msg.channel.send(f'{random.randint(0, 100)}%')
+            return
         if msg.content == "沒事":
             await msg.channel.send("樓上被盜")
+            return
         if msg.content == "再啦" or msg.content == "在啦":
             await msg.channel.send("幹")
+            return
         if msg.content == "不要瞎掰好嗎":
             async with aiohttp.ClientSession() as session:
                 async with session.get("https://i.imgur.com/yTRCBCs.jpg") as resp:
                     data = io.BytesIO(await resp.read())
                     await msg.channel.send(file=discord.File(data, 'dontxiabye.png'))
+                    return
         if msg.content == "並沒有":
             async with aiohttp.ClientSession() as session:
                 async with session.get("https://i.imgur.com/4NkYYWw.jpg") as resp:
                     data = io.BytesIO(await resp.read())
                     await msg.channel.send(file=discord.File(data, "bingmeiyou.jpg"))
-
+                    return
+        if msg.content == "怕":
+            async with aiohttp.ClientSession() as session:
+                async with session.get("https://i.imgur.com/yBd10LW.jpg") as resp:
+                    data = io.BytesIO(await resp.read())
+                    await msg.channel.send(file=discord.File(data, "pa.jpg"))
 
     @commands.command()
     async def set_game(self, ctx, *, arg):
         if await self.bot.is_owner(ctx.author):
             jdata["GAME"] = arg
             with open("settings.json", "w", encoding="utf8") as jfile:
-                json.dump(jdata, jfile, indent=4)
+                json.dump(jdata, jfile, indent=4, ensure_ascii=False)
             await self.bot.change_presence(activity=discord.Game(name=jdata["GAME"]))
         else:
             await ctx.send(embed=no)
@@ -61,7 +70,6 @@ class Extra(Cog_Ext):
 
     @commands.command()
     async def invite_list(self,ctx):
-        channels=ctx.guild.channels
         invites=""
         invite=await ctx.guild.invites()
         for i in invite:

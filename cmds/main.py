@@ -69,6 +69,20 @@ class Main(Cog_Ext):
             await ctx.send(f"已踢出 **{id.mention}**\n原因為 {reas}")
 
 
+    @commands.command()
+    #@commands.has_guild_permissions(move_members=True)
+    async def vm(self, ctx, ch1: int, ch2: int):
+        A = self.bot.get_channel(ch1)
+        B = self.bot.get_channel(ch2)
+        for i in A.members:
+            await i.move_to(B)
+
+
+    @commands.command()
+    async def user_count(self, ctx):
+        await ctx.send(len(self.bot.users))
+
+
 
 def setup(bot):
     bot.add_cog(Main(bot))

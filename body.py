@@ -4,11 +4,9 @@ import json
 import discord
 import sys
 import traceback
+import asyncio
 
 
-
-with open('settings.json', 'r', encoding='utf8') as jfile:
-    jdata = json.load(jfile)
 no = discord.Embed(
     title="You are not My Owner!", 
     color=discord.Color.dark_red()
@@ -22,12 +20,14 @@ bot.remove_command("help")
 
 @bot.event
 async def on_ready():
+    with open('settings.json', 'r', encoding='utf8') as jfile:
+        jdata = json.load(jfile)
     await bot.change_presence(activity=discord.Game(name=jdata["GAME"]))
     print('Logged in as')
     print(bot.user.name)
     print(bot.user.id)
     print('------')
-
+    
 
 @bot.command()
 async def load(ctx, ext):
@@ -62,4 +62,6 @@ for fname in os.listdir('./cmds'):
 
 
 if __name__ == "__main__":
+    with open('settings.json', 'r', encoding='utf8') as jfile:
+        jdata = json.load(jfile)
     bot.run(jdata["TOKEN"])

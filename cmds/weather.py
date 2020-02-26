@@ -1,0 +1,131 @@
+from discord.ext import commands
+from classCog import Cog_Ext
+import discord
+import asyncio
+import json
+import requests
+import pytz
+import datetime
+
+
+tz = pytz.timezone("Asia/Taipei")
+with open("weather.json", "r", encoding="utf8") as f:
+    URL = json.load(f)["URL"]
+
+
+def gen_emb(area):
+    area = area.replace("台", "臺")
+    data = requests.get(URL + area).json()["records"]["location"][0]["weatherElement"]
+    items = {}
+    types = {
+        "Wx": ["天氣狀況", ""],
+        "PoP": ["降雨率", "%"],
+        "MinT": ["最低溫", "°C"],
+        "MaxT": ["最高溫", "°C"],
+        "CI": ["舒適度", ""]
+    }
+    for i in data[0]["time"]:
+        items[i["startTime"]] = {
+            "value": "",
+            "endTime": i["endTime"]
+        }
+    emb = discord.Embed(
+        title="{0}地區今明36小時天氣預報".format(area), 
+        discription="#"
+        )
+    for item in data:
+        for t in item["time"]:
+            items[t["startTime"]]["value"] += "{0}：{2} {1}\n"\
+                .format(
+                    types[item["elementName"]][0], 
+                    types[item["elementName"]][1], 
+                    t["parameter"]["parameterName"]
+                    )
+    for K in items.keys():
+        emb.add_field(name="{0} ~ {1}".format(
+            K, 
+            items[K]["endTime"]
+            ), value=items[K]["value"], inline=False)
+    return emb
+
+
+def Ex_gen_emb():
+    emb = discord.Embed(title="各直轄市十二小時內天氣概況", discription="#")
+    contries = ["臺北市", "新北市", "桃園市", "臺中市", "臺南市", "高雄市"]
+    types = {
+        "Wx": ["天氣狀況", ""],
+        "PoP": ["降雨率", "%"],
+        "MinT": ["最低溫", "°C"],
+        "MaxT": ["最高溫", "°C"]
+    }
+    for i in contries:
+        tmp = ""
+        data = requests.get(URL + i).json()["records"]["location"][0]["weatherElement"]
+        for item in data:
+            if item["elementName"] in ["Wx", "PoP", "MaxT", "MinT"]:
+                tmp += "{0}：{2} {1}\n"\
+                    .format(
+                        types[item["elementName"]][0],
+                        types[item["elementName"]][1],
+                        item["time"][0]["parameter"]["parameterName"]
+                        )
+        emb.add_field(name=i, value=tmp, inline=False)
+    return emb
+
+
+class Weather(Cog_Ext):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        async def timeWeather():
+            await self.bot.wait_until_ready()
+            while not self.bot.is_closed():
+                nt = datetime.datetime.now(tz).strftime("%H%M")
+                if nt == "0600" or nt == "1800":
+                    ch = self.bot.get_channel(682070501233000467)
+                    await ch.send(embed=Ex_gen_emb())
+                    await asyncio.sleep(60)
+                else:
+                    await asyncio.sleep(1)
+        self.bot.loop.create_task(timeWeather())
+            
+
+    @commands.command()
+    async def weather(self, ctx, *, arg):
+        await ctx.send(embed=gen_emb(arg))
+
+
+    @commands.command()
+    async def now_weather(self, ctx, *, arg):
+        data = requests.get(URL + arg).json()["records"]["location"][0]["weatherElement"]
+        items = ""
+        types = {
+            "Wx": ["天氣狀況", ""],
+            "PoP": ["降雨率", "%"],
+            "MinT": ["最低溫", "°C"],
+            "MaxT": ["最高溫", "°C"],
+            "CI": ["舒適度", ""]
+        }
+        emb = discord.Embed(
+            title="{0}地區即時天氣資訊".format(arg), 
+            discription="#"
+            )
+        for item in data:
+            items += "{0}：{2} {1}\n"\
+                .format(
+                    types[item["elementName"]][0], 
+                    types[item["elementName"]][1], 
+                    item["time"][0]["parameter"]["parameterName"]
+                    )
+        emb.add_field(
+            name="~ {0}".format(data[0]["time"][0]["endTime"]), 
+            value=items, inline=False)
+        await ctx.send(embed=emb)
+
+
+    @commands.command()
+    async def test(self, ctx):
+        await ctx.send(embed=Ex_gen_emb())
+        
+
+def setup(bot):
+    bot.add_cog(Weather(bot))

@@ -77,7 +77,7 @@ class Weeb(Cog_Ext):
         if msg.content == "AYAYA":
             with open("weeb.json", "r", encoding="utf8") as f:
                 weebs = json.load(f)
-            if str(msg.author.id) in weebs["log"] and not self.bot.is_owner(msg.author):
+            if str(msg.author.id) in weebs["log"] and not await self.bot.is_owner(msg.author):
                 Td = weebs["log"][str(msg.author.id)]
                 delta = Td - datetime.datetime.now(tz).timestamp()
                 if(delta > 0):
@@ -107,7 +107,7 @@ class Weeb(Cog_Ext):
     async def chika(self, ctx):
         with open("weeb.json", "r", encoding="utf8") as f:
             weebs = json.load(f)
-        if str(ctx.author.id) in weebs["log"] and not self.bot.is_owner(ctx.author):
+        if str(ctx.author.id) in weebs["log"] and not await self.bot.is_owner(ctx.author):
             Td = weebs["log"][str(ctx.author.id)]
             delta = Td - datetime.datetime.now(tz).timestamp()
             if(delta > 0):
