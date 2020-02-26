@@ -82,6 +82,7 @@ class Weather(Cog_Ext):
                 nt = datetime.datetime.now(tz).strftime("%H%M")
                 if nt == "0600" or nt == "1800":
                     ch = self.bot.get_channel(682070501233000467)
+                    await ch.purge()
                     await ch.send(embed=Ex_gen_emb())
                     await asyncio.sleep(60)
                 else:

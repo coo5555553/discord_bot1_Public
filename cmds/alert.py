@@ -12,7 +12,7 @@ with open("alert.json", "r", encoding="utf8") as f:
 
 def gen_emb(data):
     emb = discord.Embed(title="地震資訊#{0}".format(data["earthquakeNo"]), 
-                        color=discord.Color.dark_gold())
+                        color=discord.Color.dark_red())
     emb.set_image(url=data["reportImageURI"])
     emb.add_field(name="發生時間", value=data["earthquakeInfo"]["originTime"], inline=False)
     emb.add_field(name="震央位置", value=data["earthquakeInfo"]["epiCenter"]["location"], inline=False)
