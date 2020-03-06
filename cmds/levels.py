@@ -2,10 +2,9 @@ from classCog import Cog_Ext
 from discord.ext import commands
 import discord
 import json
+import os
 
-
-with open("settings.json", "r", encoding="utf8") as jfile:
-    jdata = json.load(jfile)
+os.chdir("../jsons")
 
 
 class Levels(Cog_Ext):

@@ -5,16 +5,14 @@ import discord
 import json
 import datetime
 import pytz
+import os
 
+os.chdir("../jsons")
 
 tz = pytz.timezone("Asia/Taipei")
+
 with open("weeb.json", "r", encoding="utf8") as f:
     weebs = json.load(f)
-no = discord.Embed(
-    title="You are not My Owner!", 
-    color=discord.Color.dark_red()
-)
-no.set_image(url="https://i.imgur.com/Z67P5RS.gif")
 
 
 class Weeb(Cog_Ext):
@@ -40,10 +38,8 @@ class Weeb(Cog_Ext):
 
 
     @commands.command()
+    @commands.is_owner()
     async def ascii_list(self, ctx):
-        if not await self.bot.is_owner(ctx.author):
-            await ctx.send(embed=no)
-            return
         with open("weeb.json", "r", encoding="utf8") as f:
             weebs = json.load(f)
         emb = discord.Embed(title="Ascii Art List", color=discord.Colour.gold(), timestamp=datetime.datetime.now(tz))
@@ -53,10 +49,10 @@ class Weeb(Cog_Ext):
 
 
     @commands.command()
+    @commands.is_owner()
     async def ascii_add(self, ctx, *, msgs):
-        if not await self.bot.is_owner(ctx.author):
-            await ctx.send(embed=no)
-            return
+        with open("weebs.json", "r", encoding="utf8") as f:
+            weebs = json.load()
         try:
             weebs["ascii"][weebs["ascii"]["count"] + 1] = ""
             for i in msgs:

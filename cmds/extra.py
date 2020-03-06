@@ -2,6 +2,7 @@ from classCog import Cog_Ext
 from discord.ext import commands
 import discord
 import io
+import os
 import aiohttp
 import json
 import pytz
@@ -10,12 +11,10 @@ import datetime
 from disputils import BotEmbedPaginator, BotConfirmation, BotMultipleChoice
 
 
-no = discord.Embed(
-    title="You are not My Owner!", 
-    color=discord.Color.dark_red()
-)
-no.set_image(url="https://i.imgur.com/Z67P5RS.gif")
+os.chdir("../jsons")
+
 tz = pytz.timezone("Asia/Taipei")
+
 with open('settings.json', 'r', encoding='utf8') as jfile:
     jdata = json.load(jfile)
 
@@ -51,14 +50,12 @@ class Extra(Cog_Ext):
                     await msg.channel.send(file=discord.File(data, "image0.jpg"))
 
     @commands.command()
+    @commands.is_owner()
     async def set_game(self, ctx, *, arg):
-        if await self.bot.is_owner(ctx.author):
-            jdata["GAME"] = arg
-            with open("settings.json", "w", encoding="utf8") as jfile:
-                json.dump(jdata, jfile, indent=4, ensure_ascii=False)
-            await self.bot.change_presence(activity=discord.Game(name=jdata["GAME"]))
-        else:
-            await ctx.send(embed=no)
+        jdata["GAME"] = arg
+        with open("settings.json", "w", encoding="utf8") as jfile:
+            json.dump(jdata, jfile, indent=4, ensure_ascii=False)
+        await self.bot.change_presence(activity=discord.Game(name=jdata["GAME"]))
 
 
     @commands.command()
@@ -122,6 +119,7 @@ class Extra(Cog_Ext):
 
 
     @commands.command()
+    @commands.is_owner()
     async def rand_team(self, ctx, teams: int, count: int):
         if count < 2:
             await ctx.send("每組需要大於一人")

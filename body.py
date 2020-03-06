@@ -7,13 +7,6 @@ import traceback
 import asyncio
 
 
-no = discord.Embed(
-    title="You are not My Owner!", 
-    color=discord.Color.dark_red()
-)
-no.set_image(url="https://i.imgur.com/Z67P5RS.gif")
-
-
 bot = commands.Bot(command_prefix = '|')
 bot.remove_command("help")
 
@@ -27,33 +20,27 @@ async def on_ready():
     print(bot.user.name)
     print(bot.user.id)
     print('------')
-    
+
 
 @bot.command()
+@commands.is_owner()
 async def load(ctx, ext):
-    if await bot.is_owner(ctx.author):
-        bot.load_extension(f'cmds.{ext}')
-        await ctx.send(f'Loaded {ext}.')
-    else:
-        await ctx.send(embed=no)
+    bot.load_extension(f'cmds.{ext}')
+    await ctx.send(f'Loaded {ext}.')
 
 
 @bot.command()
+@commands.is_owner()
 async def unload(ctx, ext):
-    if await bot.is_owner(ctx.author):
-        bot.unload_extension(f'cmds.{ext}')
-        await ctx.send(f'Unloaded {ext}.')
-    else:
-        await ctx.send(embed=no)
+    bot.unload_extension(f'cmds.{ext}')
+    await ctx.send(f'Unloaded {ext}.')
 
 
 @bot.command()
+@commands.is_owner()
 async def reload(ctx, ext):
-    if await bot.is_owner(ctx.author):
-        bot.reload_extension(f'cmds.{ext}')
-        await ctx.send(f'Reloaded {ext}.')
-    else:
-        await ctx.send(embed=no)
+    bot.reload_extension(f'cmds.{ext}')
+    await ctx.send(f'Reloaded {ext}.')
 
 
 for fname in os.listdir('./cmds'):

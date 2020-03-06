@@ -1,10 +1,12 @@
 from discord.ext import commands
 from classCog import Cog_Ext
 import discord
+import os
 import json
 import requests
 import asyncio
 
+os.chdir("../jsons")
 
 with open("alert.json", "r", encoding="utf8") as f:
     URL = json.load(f)["URL"]
