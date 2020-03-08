@@ -18,9 +18,8 @@ with open("weather.json", "r", encoding="utf8") as f:
 async def gen_emb(area):
     area = area.replace("台", "臺")
     async with aiohttp.ClientSession() as session:
-        async with session.get(URL + area) as resp:
-            js = await resp.json()
-            data = js["records"]["location"][0]["weatherElement"]
+        async with session.get(URL + area) as _R:
+            data = (await _R.json())["records"]["location"][0]["weatherElement"]
             items = {}
             types = {
                 "Wx": ["天氣狀況", ""],
@@ -65,9 +64,8 @@ async def Ex_gen_emb():
     for i in contries:
         tmp = ""
         async with aiohttp.ClientSession() as session:
-            async with session.get(URL + i) as resp:
-                js = await resp.json()
-                data = js["records"]["location"][0]["weatherElement"]
+            async with session.get(URL + i) as _R:
+                data = (await _R.json())["records"]["location"][0]["weatherElement"]
                 for item in data:
                     if item["elementName"] in ["Wx", "PoP", "MaxT", "MinT"]:
                         tmp += "{0}：{2} {1}\n"\
@@ -104,30 +102,32 @@ class Weather(Cog_Ext):
 
     @commands.command()
     async def now_weather(self, ctx, *, arg):
-        data = requests.get(URL + arg).json()["records"]["location"][0]["weatherElement"]
-        items = ""
-        types = {
-            "Wx": ["天氣狀況", ""],
-            "PoP": ["降雨率", "%"],
-            "MinT": ["最低溫", "°C"],
-            "MaxT": ["最高溫", "°C"],
-            "CI": ["舒適度", ""]
-        }
-        emb = discord.Embed(
-            title="{0}地區即時天氣資訊".format(arg), 
-            discription="#"
-            )
-        for item in data:
-            items += "{0}：{2} {1}\n"\
-                .format(
-                    types[item["elementName"]][0], 
-                    types[item["elementName"]][1], 
-                    item["time"][0]["parameter"]["parameterName"]
+        async with aiohttp.ClientSession() as session:
+            async with session.get(URL + arg) as _R:
+                data = (await _R.json())["records"]["location"][0]["weatherElement"]
+                items = ""
+                types = {
+                    "Wx": ["天氣狀況", ""],
+                    "PoP": ["降雨率", "%"],
+                    "MinT": ["最低溫", "°C"],
+                    "MaxT": ["最高溫", "°C"],
+                    "CI": ["舒適度", ""]
+                }
+                emb = discord.Embed(
+                    title="{0}地區即時天氣資訊".format(arg), 
+                    discription="#"
                     )
-        emb.add_field(
-            name="~ {0}".format(data[0]["time"][0]["endTime"]), 
-            value=items, inline=False)
-        await ctx.send(embed=emb)
+                for item in data:
+                    items += "{0}：{2} {1}\n"\
+                        .format(
+                            types[item["elementName"]][0], 
+                            types[item["elementName"]][1], 
+                            item["time"][0]["parameter"]["parameterName"]
+                            )
+                emb.add_field(
+                    name="~ {0}".format(data[0]["time"][0]["endTime"]), 
+                    value=items, inline=False)
+                await ctx.send(embed=emb)
 
 
     @commands.command()

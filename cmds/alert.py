@@ -3,8 +3,8 @@ from classCog import Cog_Ext
 import discord
 import os
 import json
-import requests
 import asyncio
+import aiohttp
 
 
 with open("alert.json", "r", encoding="utf8") as f:
@@ -44,7 +44,9 @@ class Alert(Cog_Ext):
         async def rep():
             await self.bot.wait_until_ready()
             while not self.bot.is_closed():
-                data = requests.get(URL).json()["records"]["earthquake"][0]
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(URL) as _R:
+                        data = (await _R.json())["records"]["earthquake"][0]
                 with open("alert.json", "r", encoding="utf8") as f:
                     jdata = json.load(f)
                 if data["earthquakeNo"] > jdata["No"]:
@@ -59,8 +61,10 @@ class Alert(Cog_Ext):
 
     @commands.command()
     async def latest_EQ(self, ctx):
-        data = requests.get(URL).json()["records"]["earthquake"][0]
-        await ctx.send(embed=gen_emb(data))
+        async with aiohttp.ClientSession() as session:
+            async with session.get(URL) as _R:
+                data = (await _R.json())["records"]["earthquake"][0]
+                await ctx.send(embed = gen_emb(data))
 
 
     @commands.command()
