@@ -2,4 +2,4 @@ discord.py
 pytz
 pynacl
 disputils
-requests2
+aiohttp
