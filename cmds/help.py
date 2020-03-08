@@ -3,6 +3,7 @@ from classCog import Cog_Ext
 import discord
 from disputils import BotEmbedPaginator
 
+
 class Help(Cog_Ext):
     @commands.group()
     async def help(self, ctx):

@@ -6,7 +6,6 @@ import json
 import requests
 import asyncio
 
-os.chdir("../jsons")
 
 with open("alert.json", "r", encoding="utf8") as f:
     URL = json.load(f)["URL"]

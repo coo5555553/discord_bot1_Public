@@ -11,8 +11,6 @@ import datetime
 from disputils import BotEmbedPaginator, BotConfirmation, BotMultipleChoice
 
 
-os.chdir("../jsons")
-
 tz = pytz.timezone("Asia/Taipei")
 
 with open('settings.json', 'r', encoding='utf8') as jfile:
@@ -26,8 +24,9 @@ class Extra(Cog_Ext):
             await msg.channel.send(f'{random.randint(0, 100)}%')
             return
         if msg.content == "沒事":
-            await msg.channel.send("樓上被盜")
-            return
+            if msg.author.id != 617675266453405708:
+                await msg.channel.send("樓上被盜")
+                return
         if msg.content == "再啦" or msg.content == "在啦":
             await msg.channel.send("幹")
             return

@@ -8,7 +8,6 @@ import pytz
 import os
 import datetime
 
-os.chdir("../jsons")
 
 tz = pytz.timezone("Asia/Taipei")
 

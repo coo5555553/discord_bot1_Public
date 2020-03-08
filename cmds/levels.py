@@ -4,8 +4,6 @@ import discord
 import json
 import os
 
-os.chdir("../jsons")
-
 
 class Levels(Cog_Ext):
     @commands.Cog.listener()

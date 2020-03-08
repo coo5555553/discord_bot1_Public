@@ -7,6 +7,7 @@ import traceback
 import asyncio
 
 
+os.chdir("./jsons")
 bot = commands.Bot(command_prefix = '|')
 bot.remove_command("help")
 
@@ -43,7 +44,7 @@ async def reload(ctx, ext):
     await ctx.send(f'Reloaded {ext}.')
 
 
-for fname in os.listdir('./cmds'):
+for fname in os.listdir('../cmds'):
     if fname.endswith('.py'):
         bot.load_extension(f'cmds.{fname[:-3]}')
 

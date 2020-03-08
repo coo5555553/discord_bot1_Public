@@ -7,7 +7,6 @@ import datetime
 import pytz
 import os
 
-os.chdir("../jsons")
 
 tz = pytz.timezone("Asia/Taipei")
 
@@ -52,7 +51,7 @@ class Weeb(Cog_Ext):
     @commands.is_owner()
     async def ascii_add(self, ctx, *, msgs):
         with open("weebs.json", "r", encoding="utf8") as f:
-            weebs = json.load()
+            weebs = json.load(f)
         try:
             weebs["ascii"][weebs["ascii"]["count"] + 1] = ""
             for i in msgs:
