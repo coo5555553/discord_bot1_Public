@@ -1,6 +1,7 @@
 from classCog import Cog_Ext
 from discord.ext import commands
 import discord
+import os
 import json
 import pytz
 import datetime
@@ -47,6 +48,13 @@ class Main(Cog_Ext):
         B = self.bot.get_channel(ch2)
         for i in A.members:
             await i.move_to(B)
+
+
+    @commands.command()
+    @commands.is_owner()
+    async def env(self, ctx):
+        for i in os.environ.keys():
+            print("{0} : {1}".format(i, os.environ[i]))
 
 
 def setup(bot):

@@ -15,6 +15,19 @@ with open("weather.json", "r", encoding="utf8") as f:
     URL = json.load(f)["URL"]
 
 
+async def area_gen_emb(area, county):
+
+    with open("area.json", "r", encoding = "utf8") as f:
+        CT = json.load(f)[area]
+    async with aiohttp.ClientSession() as session:
+        async with session.get("https://opendata.cwb.gov.tw/api/v1/rest/datastore/\
+            F-D0047-{0}?\
+                Authorization=CWB-D405E9F2-0F0E-449E-B0CC-98E4AC01AA1B&\
+                    limit=1".format(CT)) as rep:
+            pass
+
+
+
 async def gen_emb(area):
     area = area.replace("台", "臺")
     async with aiohttp.ClientSession() as session:
@@ -49,6 +62,7 @@ async def gen_emb(area):
                     K, 
                     items[K]["endTime"]
                     ), value=items[K]["value"], inline=False)
+            session.close()
             return emb
 
 
@@ -75,6 +89,7 @@ async def Ex_gen_emb():
                                 item["time"][0]["parameter"]["parameterName"]
                                 )
                 emb.add_field(name=i, value=tmp, inline=False)
+    session.close()
     return emb
 
 
@@ -128,12 +143,18 @@ class Weather(Cog_Ext):
                     name="~ {0}".format(data[0]["time"][0]["endTime"]), 
                     value=items, inline=False)
                 await ctx.send(embed=emb)
+                session.close()
+
+
+    @commands.command()
+    async def area_weather(self, ctx, city, county):
+        city = city.replace("台", "臺")
 
 
     @commands.command()
     @commands.is_owner()
-    async def test(self, ctx):
-        await ctx.send(embed = await Ex_gen_emb())
+    async def test(self, ctx, city, county):
+        print("{0}, {1}".format(city, county))
         
 
 def setup(bot):

@@ -46,6 +46,8 @@ class Alert(Cog_Ext):
             while not self.bot.is_closed():
                 async with aiohttp.ClientSession() as session:
                     async with session.get(URL) as _R:
+                        if _R.status != 200:
+                            continue
                         data = (await _R.json())["records"]["earthquake"][0]
                 with open("alert.json", "r", encoding="utf8") as f:
                     jdata = json.load(f)
@@ -54,6 +56,7 @@ class Alert(Cog_Ext):
                     with open("alert.json", "w", encoding="utf8") as f:
                         json.dump(jdata, f, indent=4, ensure_ascii=False)
                     await self.bot.get_channel(jdata["CHANNEL"]).send(embed=gen_emb(data))
+                    session.close()
                 else:
                     await asyncio.sleep(5)
         self.bot.loop.create_task(rep())
@@ -65,6 +68,7 @@ class Alert(Cog_Ext):
             async with session.get(URL) as _R:
                 data = (await _R.json())["records"]["earthquake"][0]
                 await ctx.send(embed = gen_emb(data))
+                session.close()
 
 
     @commands.command()

@@ -35,18 +35,23 @@ class Extra(Cog_Ext):
                 async with session.get("https://i.imgur.com/yTRCBCs.jpg") as resp:
                     data = io.BytesIO(await resp.read())
                     await msg.channel.send(file=discord.File(data, 'image0.png'))
+                    session.close()
                     return
         if msg.content == "並沒有":
             async with aiohttp.ClientSession() as session:
                 async with session.get("https://i.imgur.com/4NkYYWw.jpg") as resp:
                     data = io.BytesIO(await resp.read())
                     await msg.channel.send(file=discord.File(data, "image0.jpg"))
+                    session.close()
                     return
         if msg.content == "怕":
             async with aiohttp.ClientSession() as session:
                 async with session.get("https://i.imgur.com/yBd10LW.jpg") as resp:
                     data = io.BytesIO(await resp.read())
                     await msg.channel.send(file=discord.File(data, "image0.jpg"))
+                    session.close()
+                    return
+
 
     @commands.command()
     @commands.is_owner()
