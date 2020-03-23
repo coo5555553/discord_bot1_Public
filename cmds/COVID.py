@@ -23,7 +23,7 @@ class COVID(Cog_Ext):
                     await asyncio.sleep(100)
                 else:
                     await asyncio.sleep(10)
-        asyncio.create_task(infected())
+        self.bot.loop.create_task(infected())
 
 
     async def _GET_COVID19(self):
