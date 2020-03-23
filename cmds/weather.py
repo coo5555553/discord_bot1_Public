@@ -62,7 +62,6 @@ async def gen_emb(area):
                     K, 
                     items[K]["endTime"]
                     ), value=items[K]["value"], inline=False)
-            session.close()
             return emb
 
 
@@ -89,7 +88,6 @@ async def Ex_gen_emb():
                                 item["time"][0]["parameter"]["parameterName"]
                                 )
                 emb.add_field(name=i, value=tmp, inline=False)
-    session.close()
     return emb
 
 
@@ -143,18 +141,11 @@ class Weather(Cog_Ext):
                     name="~ {0}".format(data[0]["time"][0]["endTime"]), 
                     value=items, inline=False)
                 await ctx.send(embed=emb)
-                session.close()
 
 
     @commands.command()
     async def area_weather(self, ctx, city, county):
         city = city.replace("台", "臺")
-
-
-    @commands.command()
-    @commands.is_owner()
-    async def test(self, ctx, city, county):
-        print("{0}, {1}".format(city, county))
         
 
 def setup(bot):

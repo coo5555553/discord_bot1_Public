@@ -56,7 +56,6 @@ class Alert(Cog_Ext):
                     with open("alert.json", "w", encoding="utf8") as f:
                         json.dump(jdata, f, indent=4, ensure_ascii=False)
                     await self.bot.get_channel(jdata["CHANNEL"]).send(embed=gen_emb(data))
-                    session.close()
                 else:
                     await asyncio.sleep(5)
         self.bot.loop.create_task(rep())
@@ -68,7 +67,6 @@ class Alert(Cog_Ext):
             async with session.get(URL) as _R:
                 data = (await _R.json())["records"]["earthquake"][0]
                 await ctx.send(embed = gen_emb(data))
-                session.close()
 
 
     @commands.command()

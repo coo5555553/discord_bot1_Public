@@ -34,21 +34,21 @@ class Extra(Cog_Ext):
             async with aiohttp.ClientSession() as session:
                 async with session.get("https://i.imgur.com/yTRCBCs.jpg") as resp:
                     data = io.BytesIO(await resp.read())
-                    await msg.channel.send(file=discord.File(data, 'image0.png'))
+                    await msg.channel.send(file=discord.File(data, 'image0.png'), delete_after = 10)
                     session.close()
                     return
         if msg.content == "並沒有":
             async with aiohttp.ClientSession() as session:
                 async with session.get("https://i.imgur.com/4NkYYWw.jpg") as resp:
                     data = io.BytesIO(await resp.read())
-                    await msg.channel.send(file=discord.File(data, "image0.jpg"))
+                    await msg.channel.send(file=discord.File(data, "image0.jpg"), delete_after = 10)
                     session.close()
                     return
         if msg.content == "怕":
             async with aiohttp.ClientSession() as session:
                 async with session.get("https://i.imgur.com/yBd10LW.jpg") as resp:
                     data = io.BytesIO(await resp.read())
-                    await msg.channel.send(file=discord.File(data, "image0.jpg"))
+                    await msg.channel.send(file=discord.File(data, "image0.jpg"), delete_after = 10)
                     session.close()
                     return
 
@@ -120,6 +120,15 @@ class Extra(Cog_Ext):
                 await ctx.channel.send(usr.mention)
             except Exception as e:
                 await ctx.send(f"查詢失敗，原因為{e}")
+
+
+    @commands.command(aliases = ["get_ch"])
+    async def get_channel(self, ctx, id: int):
+        ch = self.bot.get_channel(id)
+        if ch:
+            await ctx.send(ch.mention)
+        else:
+            await ctx.send("查無此頻道")
 
 
     @commands.command()
