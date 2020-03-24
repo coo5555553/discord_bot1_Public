@@ -19,7 +19,7 @@ class COVID(Cog_Ext):
                 nt = datetime.datetime.now(_tz).strftime("%H%M")
                 if nt == "0600":
                     ch = self.bot.get_channel(614709677783253002)
-                    await ch.send(await self._GET_COVID19())
+                    await ch.send(embed = await self._GET_COVID19())
                     await asyncio.sleep(100)
                 else:
                     await asyncio.sleep(10)
