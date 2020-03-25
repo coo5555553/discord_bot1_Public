@@ -2,11 +2,11 @@
 ### 多功能型聊天機器人(?)
 [![Python 3.7.4](https://img.shields.io/badge/Python-3.6.10-blue?style=flat&logo=python)](https://www.python.org/downloads/release/python-3610/)
 ![Discord.py](https://img.shields.io/badge/discord.py-1.3.1-blue?style=flat&logo=discord)
-![commit-activity](https://img.shields.io/github/last-commit/coo5555553/discord_bot1?style=flat-square)
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
 
 ---
-取名純屬私心
+#### 取名純屬私心
+#### 開源，暫時沒教學
 ---
 
 ### 開發者
