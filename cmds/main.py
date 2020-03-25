@@ -56,12 +56,6 @@ class Main(Cog_Ext):
         await ctx.send(usr.avatar_url)
 
 
-    @commands.command()
-    @commands.is_owner()
-    async def env(self, ctx):
-        for i in os.environ.keys():
-            print("{0} : {1}".format(i, os.environ[i]))
-
 
 def setup(bot):
     bot.add_cog(Main(bot))
