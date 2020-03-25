@@ -1,6 +1,6 @@
 {
-    "TOKEN": "NjExOTM3NTE2NzY1MDUyOTU4.XjvQQg.scW9z1XaQKFegWAiY80MHInWznk",
+    "TOKEN": "YOUR TOKEN",
     "TIME": "0000",
-    "CHANNEL": 614709677783253002,
-    "GAME": "\u8af8\u541b\uff0c\u6211\u611b\u9e7f\u4e43"
+    "CHANNEL": "CHANNEL(INT)",
+    "GAME": "GAME"
 }
