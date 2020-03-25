@@ -43,8 +43,8 @@ ch = self.bot.get_channel(CH) # CH改為每日疫情頻道ID
 |:------------:|
 |[![Duck](https://avatars0.githubusercontent.com/u/60691401?s=4=128&u=95da0bc00d5d37fe4d6e83368a61823d00dc48bd&v=4)](https://github.com/coo5555553)|
 ---
-### 目前功能s (暫時只列出常用功能)
-**Prefix可在 `body.py` 第11列更改**
+### 目前功能s
+ **Prefix可在 `body.py` 第11列更改**
 * 模組管理指令
     * `|load <module name>` ： 載入目標模組 
     * `|unload <module name>` ：卸載指定模組
