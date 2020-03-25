@@ -43,15 +43,6 @@ class COVID(Cog_Ext):
     async def COVID19(self, ctx):
         await ctx.send(embed = await self._GET_COVID19())
 
-
-    @commands.command()
-    async def test(self, ctx):
-        async with aiohttp.ClientSession() as session:
-            async with session.get("https://covid19dashboard.cdc.gov.tw/dash3") as resp:
-                data = await resp.json()
-                with open("tmp.json", "w+", encoding="utf8") as _F:
-                    json.dump(data, _F, indent=4, ensure_ascii=False)
-
-
+        
 def setup(bot):
     bot.add_cog(COVID(bot))
