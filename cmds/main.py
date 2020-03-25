@@ -56,6 +56,12 @@ class Main(Cog_Ext):
 
     @commands.command()
     @commands.is_owner()
+    async def avatar(self, ctx, usr: discord.User):
+        await ctx.send(usr.avatar_url)
+
+
+    @commands.command()
+    @commands.is_owner()
     async def env(self, ctx):
         for i in os.environ.keys():
             print("{0} : {1}".format(i, os.environ[i]))
