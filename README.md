@@ -1,5 +1,6 @@
 # 惠ちゃん 
 ### 多功能型聊天機器人(?)
+##### *持續更新中...*
 [![Python 3.6.10](https://img.shields.io/badge/Python-3.6.10-blue?style=flat&logo=python)](https://www.python.org/downloads/release/python-3610/)
 ![Discord.py](https://img.shields.io/badge/discord.py-1.3.1-blue?style=flat&logo=discord)
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
@@ -62,7 +63,7 @@ ch = self.bot.get_channel(CH) # CH改為每日疫情頻道ID
 * Alert指令
     * `|latest_EQ` ： 查詢最近大規模地震
 * COVID指令
-    * `|COVID19` ： 查詢COVID-19疫情資訊
+    * `|COVID19 <all(選填)>` ： 查詢台灣COVID-19疫情資訊，all可查詢全球資訊
 * Extra指令
     * `|get_user <User>` ： 查詢該使用者及其線上狀態 (機器人必須與其有共同伺服器)
     * `|fetch_user <User>` ： 獲得該使用者的資訊 (機器人不必與其有共同伺服器)
