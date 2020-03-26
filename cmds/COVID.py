@@ -28,8 +28,8 @@ class COVID(Cog_Ext):
 
     async def _GET_COVID19(self):
         async with aiohttp.ClientSession() as session:
-            async with session.get("https://covid19dashboard.cdc.gov.tw/dash3") as resp:
-                data = (await resp.json())["0"]
+            async with session.get("https://covid19dashboard.cdc.gov.tw/dash3") as _R:
+                data = (await _R.json())["0"]
                 emb = discord.Embed(
                     title="COVID-19疫情資訊", 
                     color=discord.Color.dark_red()
@@ -39,18 +39,35 @@ class COVID(Cog_Ext):
                 return emb
 
 
-    @commands.command()
+    @commands.group()
     async def COVID19(self, ctx):
-        await ctx.send(embed = await self._GET_COVID19())
+        if ctx.invoked_subcommand is None:
+            await ctx.send(embed = await self._GET_COVID19())
 
 
-    @commands.command()
-    async def test(self, ctx):
+    @COVID19.command()
+    async def all(self, ctx):
         async with aiohttp.ClientSession() as session:
-            async with session.get("https://covid19dashboard.cdc.gov.tw/dash3") as resp:
-                data = await resp.json()
-                with open("tmp.json", "w+", encoding="utf8") as _F:
-                    json.dump(data, _F, indent=4, ensure_ascii=False)
+            async with session.get("https://covid19dashboard.cdc.gov.tw/dash2") as _R:
+                data = (await _R.json())["0"]
+                items = {
+                    "cases": "全球確定病例數",
+                    "deaths": "全球死亡病例數",
+                    "cfr": "全球致死率",
+                    "countries": "國家/地區數"
+                }
+                emb = discord.Embed(
+                    title="COVID-19全球疫情資訊",
+                    color=discord.Color.dark_red()
+                )
+                for i in data.keys():
+                    emb.add_field(
+                        name = items[i],
+                        value = data[i],
+                        inline = False
+                    )
+                await ctx.send(embed = emb)
+
 
 
 def setup(bot):
