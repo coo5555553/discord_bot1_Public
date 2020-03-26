@@ -9,10 +9,6 @@ import datetime
 tz = pytz.timezone("Asia/Taipei")
 
 
-if not "DATABASE_URL" in os.environ.keys():
-    os.environ["DATABASE_URL"] = "postgres://nnjlyuoqeygoyi:fccc90823e9f004f5f675480057fb18abf330601c756c917ea0f692274957bc0@ec2-184-72-235-159.compute-1.amazonaws.com:5432/d8em1j70s3poop"
-
-
 class Main(Cog_Ext):
     @commands.command()
     async def ping(self, ctx):
@@ -59,12 +55,6 @@ class Main(Cog_Ext):
     async def avatar(self, ctx, usr: discord.User):
         await ctx.send(usr.avatar_url)
 
-
-    @commands.command()
-    @commands.is_owner()
-    async def env(self, ctx):
-        for i in os.environ.keys():
-            print("{0} : {1}".format(i, os.environ[i]))
 
 
 def setup(bot):

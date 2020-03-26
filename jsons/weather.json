@@ -1,4 +1,4 @@
 {
-    "URL": "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=CWB-D405E9F2-0F0E-449E-B0CC-98E4AC01AA1B&limit=1&locationName=",
-    "CHANNEL": 676059245090701353
+    "URL": "https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization={KEY}&limit=1&locationName=",
+    "CHANNEL": "CHANNEL"
 }
