@@ -11,7 +11,7 @@ with open("alert.json", "r", encoding="utf8") as f:
     URL = json.load(f)["URL"]
 
 
-def gen_emb(data):
+def gen_emb(data):  #回傳embed
     emb = discord.Embed(title="地震資訊#{0}".format(data["earthquakeNo"]), 
                         color=discord.Color.dark_red())
     emb.set_image(url=data["reportImageURI"])
@@ -20,7 +20,7 @@ def gen_emb(data):
     emb.add_field(name="震源深度", value="{0}公里".format(data["earthquakeInfo"]["depth"]["value"]), inline=False)
     emb.add_field(name="芮氏規模", value=data["earthquakeInfo"]["magnitude"]["magnitudeValue"])
     area = ""
-    for i in data["intensity"]["shakingArea"]:
+    for i in data["intensity"]["shakingArea"]:  #找>=三級
         if "最大震度" in i["areaDesc"]:
             if i["areaIntensity"]["value"] >= 3:
                 area += "{0} {1}級\n".format(i["areaName"], i["areaIntensity"]["value"])
@@ -31,7 +31,7 @@ def gen_emb(data):
                     area += "臺北市 2級\n"
             elif i["areaIntensity"]["value"] == 2 and "新北市" in i["areaName"]:
                 area += "新北市 2級\n"
-    if area == "":
+    if area == "":  #無
         emb.add_field(name="各地最高震度(只列出3級以上)", value="無", inline=False)
     else:
         emb.add_field(name="各地最高震度(只列出3級以上)", value=area, inline=False)
@@ -46,23 +46,23 @@ class Alert(Cog_Ext):
             while not self.bot.is_closed():
                 async with aiohttp.ClientSession() as session:
                     async with session.get(URL) as _R:
-                        if _R.status != 200:
-                            continue
+                        if _R.status != 200:    #如果失敗
+                            continue #重試
                         data = (await _R.json())["records"]["earthquake"][0]
                 with open("alert.json", "r", encoding="utf8") as f:
                     jdata = json.load(f)
-                if data["earthquakeNo"] > jdata["No"]:
+                if data["earthquakeNo"] > jdata["No"]: #如果是新的
                     jdata["No"] = data["earthquakeNo"]
                     with open("alert.json", "w", encoding="utf8") as f:
-                        json.dump(jdata, f, indent=4, ensure_ascii=False)
-                    await self.bot.get_channel(jdata["CHANNEL"]).send(embed=gen_emb(data))
+                        json.dump(jdata, f, indent=4, ensure_ascii=False) #更新
+                    await self.bot.get_channel(jdata["CHANNEL"]).send(embed=gen_emb(data))  #傳送
                 else:
                     await asyncio.sleep(5)
-        self.bot.loop.create_task(rep())
+        self.bot.loop.create_task(rep())    #LOOP
 
 
     @commands.command()
-    async def latest_EQ(self, ctx):
+    async def latest_EQ(self, ctx): #手動查詢
         async with aiohttp.ClientSession() as session:
             async with session.get(URL) as _R:
                 data = (await _R.json())["records"]["earthquake"][0]
