@@ -15,19 +15,6 @@ with open("weather.json", "r", encoding="utf8") as f:
     URL = json.load(f)["URL"]
 
 
-async def area_gen_emb(area, county):
-
-    with open("area.json", "r", encoding = "utf8") as f:
-        CT = json.load(f)[area]
-    async with aiohttp.ClientSession() as session:
-        async with session.get("https://opendata.cwb.gov.tw/api/v1/rest/datastore/\
-            F-D0047-{0}?\
-                Authorization=CWB-D405E9F2-0F0E-449E-B0CC-98E4AC01AA1B&\
-                    limit=1".format(CT)) as rep:
-            pass
-
-
-
 async def gen_emb(area):
     area = area.replace("台", "臺")
     async with aiohttp.ClientSession() as session:
@@ -65,7 +52,7 @@ async def gen_emb(area):
             return emb
 
 
-async def Ex_gen_emb():
+async def Ex_gen_emb(): #定時氣候
     emb = discord.Embed(title="各直轄市十二小時內天氣概況", discription="#")
     contries = ["臺北市", "新北市", "桃園市", "臺中市", "臺南市", "高雄市"]
     types = {
@@ -78,7 +65,7 @@ async def Ex_gen_emb():
         tmp = ""
         async with aiohttp.ClientSession() as session:
             async with session.get(URL + i) as _R:
-                data = (await _R.json())["records"]["location"][0]["weatherElement"]
+                data = (await _R.json())["records"]["location"][0]["weatherElement"]    #讀取
                 for item in data:
                     if item["elementName"] in ["Wx", "PoP", "MaxT", "MinT"]:
                         tmp += "{0}：{2} {1}\n"\
@@ -86,7 +73,7 @@ async def Ex_gen_emb():
                                 types[item["elementName"]][0],
                                 types[item["elementName"]][1],
                                 item["time"][0]["parameter"]["parameterName"]
-                                )
+                                )   #整理
                 emb.add_field(name=i, value=tmp, inline=False)
     return emb
 
@@ -98,14 +85,14 @@ class Weather(Cog_Ext):
             await self.bot.wait_until_ready()
             while not self.bot.is_closed():
                 nt = datetime.datetime.now(tz).strftime("%H%M")
-                if nt == "0600" or nt == "1800":
+                if nt == "0600" or nt == "1800":    #定時
                     ch = self.bot.get_channel(682070501233000467)
                     await ch.purge()
-                    await ch.send(embed = await Ex_gen_emb())
+                    await ch.send(embed = await Ex_gen_emb())   #更新
                     await asyncio.sleep(60)
                 else:
                     await asyncio.sleep(1)
-        self.bot.loop.create_task(timeWeather())
+        self.bot.loop.create_task(timeWeather())    #LOOP
             
 
     @commands.command()
@@ -141,11 +128,6 @@ class Weather(Cog_Ext):
                     name="~ {0}".format(data[0]["time"][0]["endTime"]), 
                     value=items, inline=False)
                 await ctx.send(embed=emb)
-
-
-    @commands.command()
-    async def area_weather(self, ctx, city, county):
-        city = city.replace("台", "臺")
         
 
 def setup(bot):
