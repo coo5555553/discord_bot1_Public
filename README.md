@@ -1,6 +1,6 @@
 # 惠ちゃん 
 ### 多功能型聊天機器人(?)
-##### *持續更新中...*
+##### *不定時更新...*
 [![Python 3.6.10](https://img.shields.io/badge/Python-3.6.10-blue?style=flat&logo=python)](https://www.python.org/downloads/release/python-3610/)
 ![Discord.py](https://img.shields.io/badge/discord.py-1.3.1-blue?style=flat&logo=discord)
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
